@@ -1,0 +1,1476 @@
+EXERCISE 3.2
+SELECT title, advance
+FROM book
+WHERE advance <= 7000;
+
+SELECT lastname, firstname, city, state
+FROM author
+WHERE NOT (state = 'CA' OR state = 'UT');
+
+EXERCISE 3.3
+SELECT title, price
+FROM book
+WHERE (price <= 30 AND price >= 20);
+
+SELECT title, price
+FROM book
+WHERE NOT (price <= 30 AND price >= 20);
+
+SELECT title, advance
+FROM book
+WHERE (advance = 5000 OR advance = 7000);
+
+EXERCISE 3.4
+SELECT title, price, advance, pubdate
+FROM book
+WHERE price IS NULL;
+
+SELECT title, price, advance, pubdate
+FROM book
+WHERE price IS NOT NULL;
+
+SELECT title, price, advance, pubdate
+FROM book
+WHERE price > 0;
+
+EXERCISE 3.5
+SELECT advance, price
+FROM book
+ORDER BY 2 DESC;
+
+QUIZ 7
+SELECT title, price, advance
+FROM book
+WHERE advance >= 10000 OR price > 30 OR price IS NULL
+ORDER BY 1;
+
+QUIZ 8
+SELECT firstname, lastname
+FROM author
+WHERE ((city = 'Oakland' AND state = 'CA') OR lastname = 'Singer')  
+ORDER BY 2, 1;
+
+QUIZ 9
+SELECT title, isbn, pubdate
+FROM book
+WHERE pubdate IS NULL
+ORDER BY title;
+
+EXERCISE 4.1
+employeeDepartment_id = foreign key
+
+SELECT name, title
+	FROM publisher
+	JOIN book USING (pub_id)
+	WHERE price > 20
+	ORDER BY 1,2;
+
+EXERCISE 4.2
+SELECT title, name AS Publisher
+	FROM publisher
+	JOIN book USING (pub_id)
+	WHERE name = 'Binder and Smith';
+	
+
+SELECT name, title
+	FROM publisher JOIN book
+		ON (publisher.pub_id = book.pub_id)
+	ORDER BY 1, 2;
+
+SELECT p.name, b.title
+	FROM publisher p JOIN book b
+		ON (p.pub_id = b.pub_id)
+	ORDER BY 1, 2;
+
+EXERCISE 4.3
+SELECT author.firstname, author.lastname, book.title, author.zip, book.ytd_sales
+	FROM author JOIN book
+		ON (author.zip = book.ytd_sales);
+
+SELECT name, title, price, advance
+	FROM publisher JOIN book USING (pub_id)
+	WHERE price > 10 AND advance > 10000
+	ORDER BY 1, 2;
+
+SELECT p.name, p.city, a.firstname, a.lastname, a.city, a.state
+	FROM publisher p JOIN author a
+		ON (p.state = a.state)
+	WHERE (a.city = "Oakland" AND a.state = "CA");
+
+SELECT name, title, ytd_sales
+  FROM publisher JOIN book USING (pub_id)
+  WHERE (name = 'Sunshine Publishers' 
+     OR name = 'All Techo Books')
+         AND ytd_sales > 5000
+  ORDER BY name, title;
+
+EXERCISE 5.2
+SELECT COUNT(*)
+	FROM book JOIN publisher USING (pub_id) 
+	WHERE (name = 'Binder and Smith');
+
+SELECT COUNT(*)
+	FROM author a JOIN publisher p
+	ON (a.city = p.city);
+
+EXERCISE 5.3
+SELECT MIN(title)
+	FROM book JOIN publisher USING (pub_id)
+	WHERE name = 'Binder and Smith';
+
+SELECT MAX(price)
+	FROM book;
+
+EXERCISE 5.4
+SELECT AVG(price)
+	FROM book JOIN publisher USING (pub_id)
+	WHERE name = 'All Techo Books';
+	
+SELECT SUM(ytd_sales)
+	FROM book JOIN publisher USING (pub_id)
+	WHERE name = 'Sunshine Publishers';
+
+EXERCISE 5.5
+SELECT CONCAT('Publisher: ', name, ' is based in ', city, ', ', state) AS 'informaton'
+	FROM publisher;
+
+SELECT CONCAT('Average price is: ', AVG(price))
+	FROM book;
+
+SELECT CONCAT(firstname, ' ', lastname, ' is an Author who lives in ', city, ', ', state)
+	FROM author;
+
+KEYQUIZ 12
+SELECT AVG(advance), SUM(ytd_sales), COUNT(*)
+	FROM book JOIN publisher USING (pub_id)
+	WHERE name = 'Sunshine Publishers' OR 'All Techo Books';
+
+EXERCISE 6.1
+Foreign keys = Bookauthor: author_id, isbn
+	book: pub_id
+	
+EXERCISE 6.2
+SELECT title, lastname, firstname
+	FROM book
+		JOIN bookauthor USING (ISBN)
+		JOIN author USING (author_id)
+	ORDER BY 1, 2, 3;
+
+SELECT lastname, firstname, title, author_order, royaltyshare
+	FROM book
+		JOIN bookauthor USING (ISBN)
+		JOIN author USING (author_id)
+	ORDER BY 1, 2, 3;
+	
+SELECT name, title, lastname, firstname
+	FROM publisher
+		JOIN book USING (pub_id)
+		JOIN bookauthor USING (ISBN)
+		JOIN author USING (author_id)
+	WHERE name = "All Techo Books"
+	ORDER BY 1, 2, 3, 4;
+
+EXERCISE 6.3
+SELECT AVG(price)
+	FROM book
+		JOIN bookauthor USING (ISBN)
+		JOIN author USING (author_id)
+	WHERE firstname = 'Albert' AND lastname = 'Singer';
+
+SELECT COUNT(*)
+	FROM book
+		JOIN bookauthor USING (ISBN)
+		JOIN author USING (author_id)
+	WHERE firstname = 'Michael' AND lastname = 'Farhey';
+
+SELECT ssn, a.city, a.city
+	FROM author a
+		JOIN publisher p
+			ON (a.city = p.city AND a.state = p.state)
+	ORDER BY 1, 2, 3;
+
+SELECT name, title, lastname, firstname
+	FROM zpublisher
+		JOIN book ON (publisher_id = pub_id)
+		JOIN zbookauthor USING (ISBN)
+		JOIN zauthor ON (author_id = SSN)
+	WHERE name = 'All techo books'
+	ORDER BY 1, 2, 3, 4;
+
+EXERCISE 6.4
+SELECT a.firstname, a.lastname, a.state
+	FROM author a
+		JOIN publisher p ON (a.state = p.state)
+	WHERE p.name = "Sunshine Publishers";
+
+EXERCISE 6.5
+SELECT DISTINCT state
+	FROM author
+	ORDER BY 1;
+
+SELECT COUNT(DISTINCT state)
+	FROM author
+	ORDER BY 1;
+
+SELECT DISTINCT price, advance
+	FROM book
+	ORDER BY 1, 2;
+
+SELECT DISTINCT pubdate
+	FROM book
+	WHERE pubdate IS NOT NULL
+	ORDER BY 1;
+
+SELECT DISTINCT lastname, firstname, isbn
+	FROM author
+		JOIN bookauthor USING (author_id)
+	WHERE isbn IS NOT NULL
+	ORDER BY lastname;
+
+SELECT price * ytd_sales "Revenue", title
+	FROM book
+	WHERE price > 20
+	ORDER BY Revenue DESC;
+
+EXERCISE 6.6
+SELECT (price * ytd_sales) - advance "Profit"
+	FROM book
+	WHERE (price * ytd_sales) - advance IS NOT NULL
+	ORDER BY Profit;
+
+SELECT title, firstname, lastname
+	FROM author
+		JOIN bookauthor USING (author_id)
+		JOIN book USING (ISBN)
+	WHERE state = "CA";
+
+SELECT ssn, a.city, a.state, p.city, p.state
+	FROM author a
+		JOIN publisher p ON (a.city = p.city AND a.state = p.state);
+
+EXERCISE 7.1
+SELECT name, SUM(ytd_sales)
+	FROM book
+		JOIN publisher USING (pub_id)
+	GROUP BY name
+	ORDER BY 1;
+
+SELECT type, COUNT(isbn)
+	FROM book
+	GROUP BY type
+	ORDER BY 1;
+
+SELECT firstname, lastname, AVG(advance)
+	FROM book
+		JOIN bookauthor USING (isbn)
+		JOIN author USING (author_id)
+	GROUP BY firstname, lastname;
+	
+EXERCISE 7.2
+SELECT type, AVG(price)
+	FROM book
+	GROUP BY type
+	HAVING AVG(price) > 25
+	ORDER BY 1,2;
+
+SELECT type, COUNT(isbn)
+	FROM book
+	GROUP BY type
+	HAVING COUNT(title) > 2
+	ORDER BY 1;
+
+SELECT name, SUM(ytd_sales)
+	FROM publisher
+		JOIN book USING (pub_id)
+	GROUP BY name
+	HAVING SUM(ytd_sales) < 40000
+	ORDER BY 1;
+
+SELECT type, AVG(price), SUM(ytd_sales)
+	FROM book
+	GROUP BY type
+	HAVING AVG(price) > 25
+		AND SUM(ytd_sales) > 20000
+	ORDER BY 1,2;
+
+SELECT type, price, AVG(price), SUM(ytd_sales)
+	FROM book
+	GROUP BY type, price
+	HAVING AVG(price) > 10
+		AND SUM(ytd_sales) > 5000
+	ORDER BY 1,2;
+
+EXERCISE 7.3
+SELECT firstname, COUNT(isbn), SUM(ytd_sales)
+	FROM book
+		JOIN bookauthor USING (isbn)
+		JOIN author USING (author_id)
+	GROUP BY firstname
+	HAVING SUM(ytd_sales) > 5000
+		AND COUNT(isbn) > 1
+	ORDER BY 1;
+
+SELECT type, AVG(price)
+	FROM book
+	GROUP BY type
+	HAVING AVG(price) > 30
+	ORDER BY 1;
+
+SELECT firstname, lastname, SUM(ytd_sales)
+	FROM book
+		JOIN bookauthor USING (isbn)
+		JOIN author USING (author_id)
+	GROUP BY firstname, lastname
+	HAVING SUM(ytd_sales) <= 10000 
+		AND SUM(ytd_sales) >= 5000
+	ORDER BY 1, 2, 3;
+	
+SELECT lastname, firstname, state
+	FROM author
+	WHERE state IN ('CA', 'TX', 'NY');
+
+EXERCISE 8.1
+SELECT type, COUNT(isbn)
+	FROM book
+	WHERE type IN ('computer', 'psychology', 'business')
+	GROUP BY type;
+	
+SELECT name, SUM(ytd_sales), advance
+	FROM publisher
+		JOIN book USING (pub_id)
+	WHERE advance IN ('4000', '5000', '6000', '7000')
+	GROUP BY name, advance;
+
+SELECT title, price
+	FROM book
+	WHERE title >= 'D' AND title <= 'T'
+	ORDER BY 1;
+	
+SELECT title, pubdate
+	FROM book
+	WHERE pubdate >= '06/15/2012' AND pubdate <= '06/30/2012'
+	ORDER BY 2;
+
+--between is much slower
+SELECT title, price
+	FROM book
+	WHERE price BETWEEN 20 AND 40
+	ORDER BY 2;
+
+SELECT title, pubdate
+	FROM book
+	WHERE title BETWEEN '06/15/2012' AND pubdate <= '06/30/2012'
+	ORDER BY 2;
+
+EXERCISE 8.2
+SELECT firstname, lastname, advance
+	FROM book
+		JOIN bookauthor USING (isbn)
+		JOIN author USING (author_id)
+	WHERE advance BETWEEN 10000 AND 30000
+	ORDER BY 3;
+
+SELECT firstname, lastname, author_order
+	FROM author
+		JOIN bookauthor USING (author_id)
+	WHERE author_order BETWEEN 2 AND 3
+	ORDER BY 1, 2;
+
+SELECT lastname, firstname
+	FROM author
+	WHERE lastname LIKE 'S%'
+	ORDER BY 1, 2;
+
+SELECT lastname, firstname, phone
+	FROM author
+	WHERE phone LIKE '____836%'
+	ORDER BY 1,2,3;
+
+EXERCISE 8.3
+SELECT lastname, firstname
+	FROM author
+	WHERE lastname LIKE 'Mc%' OR lastname LIKE 'Mac%'
+	ORDER BY 1;
+
+SELECT title
+	FROM book
+	WHERE title LIKE '%?'
+	ORDER BY 1;
+
+SELECT title
+	FROM book
+	WHERE title LIKE '%ing%'
+	ORDER BY 1;
+
+SELECT type
+	FROM book
+	WHERE type LIKE '_oo%' OR type LIKE '__oo%' OR type LIKE '_om%' OR type LIKE '__om%'
+	ORDER BY 1;
+
+SELECT e.lastname, e.firstname, editor_position
+	FROM editor e
+		JOIN author a USING (ssn)
+	ORDER BY 1,2;
+	
+SELECT a.lastname, a.firstname, editor_position
+	FROM author a
+		LEFT OUTER JOIN editor e USING (ssn)
+	ORDER BY 1,2;
+
+SELECT a.lastname, a.firstname, editor_position
+	FROM author a
+		RIGHT OUTER JOIN editor e USING (ssn)
+	ORDER BY 1,2;
+
+SELECT e.lastname, e.firstname, editor_position, a.lastname 'Also an Author'
+	FROM editor e
+		LEFT OUTER JOIN author a USING (ssn)
+	ORDER BY 1,2;
+
+SELECT lastname, firstname, author_order
+	FROM author
+		LEFT OUTER JOIN bookauthor USING (author_id)
+	ORDER BY 1,2,3;
+
+SELECT lastname, firstname, title
+	FROM author
+		LEFT OUTER JOIN bookauthor USING (author_id)
+		LEFT OUTER JOIN book USING (ISBN)
+	ORDER BY 1,2,3;
+
+EXERCISE 8.4
+SELECT name, firstname, a.city, a.state, p.city, p.state
+	FROM publisher p
+		LEFT OUTER JOIN author a ON (a.city = p.city AND a.state = p.state)
+	ORDER BY 1, 2;
+	
+SELECT lastname, firstname, title
+	FROM author
+		LEFT OUTER JOIN bookauthor USING (author_id)
+		LEFT OUTER JOIN book USING (ISBN)
+	WHERE lastname LIKE 'Mc%' OR lastname LIKE 'Hunt%'
+	ORDER BY 1;
+
+SELECT lastname, firstname, isbn
+	FROM author
+		LEFT OUTER JOIN bookauthor USING (author_id)
+		LEFT OUTER JOIN book USING (ISBN)
+	ORDER BY 1,2;
+
+SELECT lastname, firstname, salary, editor_position
+	FROM editor
+	WHERE salary BETWEEN 50000 AND 100000
+	ORDER BY 1,2;
+
+SELECT title
+	FROM book
+	WHERE title LIKE '%stressed%';
+
+SELECT lastname, firstname, state
+	FROM author
+	WHERE state IN ('IL', 'UT', 'MI')
+	ORDER BY 1,2,3;
+
+SELECT lastname, firstname, state
+	FROM author
+	WHERE state IN
+		(SELECT DISTINCT state FROM publisher)
+	ORDER BY 1,2,3;
+
+EXERCISE 9.1
+advantages of IN list:
+--can quickly use tables to signify data
+
+disadvantages of IN list:
+--data from another table can hold information youre not looking for
+
+SELECT lastname, firstname, 'wrote more than one book'
+	FROM author
+	WHERE author_id IN
+		(SELECT DISTINCT author_id
+		FROM bookauthor
+		GROUP BY author_id
+		HAVING count(*) > 1)
+	ORDER BY 1,2;
+
+SELECT title, price
+	FROM book
+	WHERE price IN
+		(SELECT DISTINCT price
+		FROM book
+		WHERE title LIKE 'HOW%')
+	ORDER BY 1,2;
+
+SELECT lastname, firstname, 'sell books at 12.99'
+	FROM author
+	WHERE author_id IN
+		(SELECT author_id
+		FROM bookauthor
+		WHERE isbn IN
+			(SELECT isbn
+			FROM book
+			WHERE price = 12.99))
+	ORDER BY 1,2;
+
+EXERCISE 9.2
+SELECT title, 'published by Sunshine Publishers'
+	FROM book
+	WHERE pub_id IN
+		(SELECT pub_id
+		FROM publisher
+		WHERE name IN
+			(SELECT name
+			FROM publisher
+			WHERE name = 'Sunshine Publishers'))
+	ORDER BY 1,2;
+
+SELECT lastname, firstname, 'Editor who wrote a book that was published'
+	FROM editor
+	WHERE editor_id IN
+		(SELECT editor_id
+		FROM bookeditor
+		WHERE isbn IN
+			(SELECT isbn
+			FROM book
+			WHERE pub_id IN
+				(SELECT pub_id
+				FROM book
+				WHERE pub_id IS NOT NULL)))
+	ORDER BY 1,2;
+
+SELECT title, ytd_sales, price
+	FROM book
+	WHERE ytd_sales >
+		(SELECT SUM(ytd_sales) - 30000
+		FROM book
+		WHERE price < 20)
+	ORDER BY 1,2,3;
+
+--find sales with price higher than average
+SELECT type, SUM(ytd_sales)
+	FROM book
+	GROUP BY type
+	HAVING AVG(ytd_sales) >
+		(SELECT AVG(ytd_sales)
+		FROM book)
+	ORDER BY 1,2;
+
+EXERCISE 9.3
+SELECT title, ytd_sales
+	FROM book
+	GROUP BY title
+	HAVING ytd_sales >
+		(SELECT MIN(zip)
+		FROM author)
+	ORDER BY 1,2;
+
+SELECT lastname, firstname, salary
+	FROM editor
+	HAVING salary >
+		(SELECT AVG(salary)
+		FROM editor)
+	ORDER BY 3 DESC;
+
+EXERCISE 9.4
+--rewrite the JOIN funtion into a subquery
+SELECT title, 'costs 12.99 and was written by Anne Singer'
+	FROM book
+	  JOIN bookauthor USING (ISBN)
+	  JOIN author USING(author_id)
+	WHERE price = 12.99 AND lastname = 'Singer' AND firstname = 'Anne'
+	ORDER BY 1;
+
+--subquery
+SELECT title, 'costs 12.99 and was written by Anne Singer'
+	FROM book
+	WHERE isbn IN
+		(SELECT isbn 
+		FROM bookauthor
+		WHERE author_id IN
+			(SELECT author_id
+			FROM author
+			WHERE price = 12.99 AND lastname = 'Singer' AND firstname = 'Anne'))
+	ORDER BY 1;
+
+SELECT lastname, firstname
+	FROM editor
+	WHERE editor_id IN
+		(SELECT manager_editor_id
+		FROM editor
+		WHERE editor_id = 3)
+	ORDER BY 1;
+
+--self joins / recursive relationships
+SELECT e2.lastname, e2.firstname
+	FROM editor e1
+		JOIN editor e2 ON (e1.editor_id = e2.managing_editor_id)
+	WHERE e1.editor_id = 3
+	ORDER BY 1,2;
+
+EXERCISE 9.5
+--self-join / recursive
+SELECT lastname, firstname, administrator_type
+	FROM administrator a1
+		JOIN administrator a2 ON (a1.administrator = a2.administrator_type) 
+	WHERE a2.administrator_type = 2
+	ORDER BY 1,2;
+	
+SELECT weapon, 'Combat type'
+	FROM combat c1
+		JOIN combat c2 ON (c1.combat_id = c2.type_combat_id)
+	WHERE c2.combat_name LIKE '%special%'
+	ORDER BY 1,2;
+	
+--subquery / recursive
+SELECT weapon, 'combat type'
+	FROM combat
+	WHERE combat_id IN
+		(SELECT special_combat_id
+		FROM combat
+		WHERE combat_name LIKE '%special%')
+	ORDER BY 1,2;
+	
+--NASA subquery
+SELECT part_name, 'is part of a Rocket Engine'
+	FROM parts
+	WHERE part_id IN
+		(SELECT containing_part_id
+		FROM parts
+		WHERE part_name = 'Rocket Engine')
+	ORDER BY 1;
+
+--NASA self-join
+SELECT part_name, 'is part of a Rocket Engine'
+	FROM parts p1
+		JOIN parts p2 ON (p1.part_id = p2.containing_part_id)
+	WHERE p2.part_name = 'Rocket Engine'
+	ORDER BY 1;
+
+SELECT name, title, advance
+	FROM book
+		JOIN publisher USING (pub_id)
+	WHERE advance <
+		(SELECT AVG(advance)
+		FROM book)
+	ORDER BY 1,2,3;
+
+SELECT lastname, firstname, state
+	FROM author
+	WHERE state IN
+		(SELECT state
+		FROM publisher
+		WHERE name = 'all techo books')
+	ORDER BY 1,2;
+
+--entity relationship modeling
+many to many
+
+--normalization
+reduces data redundancy
+
+--Think about organizations or companies you have worked
+--for.   What kind of data was being tracked?   What kind
+--of entities do you think were used in the design of the
+--database (e.g. Employee, Department, etc.)
+
+Uber: miles driven being tracked.
+entities: destination, currentlocation, driver, user, restaurant, time, date
+
+ Database Design (aka Data Modeling) involves making
+    creative choices.  Some companies may want to allow
+    for an employee to be in more than one department
+    and some other companies may want the database to
+    prevent that from happening.  It is a business
+    decision, not a database design rule.
+
+--entity relationship modeling
+ Book title
+ Author1 lastname, Author1 firstname, etc.
+ Author2 lastname, Author2 firstname, etc.
+ Author3 lastname, Author3 firstname, etc.
+ Publisher name, address
+ Published Date
+ Price of book
+ Advance to Author1, Advance to Author2, etc.
+ 
+author +- bookauthor -+ book
+						+
+						|
+						publisher
+
+--normalization
+continue organizing data to reduce data redundancy
+break up entities into various forms to describe the table
+
+--first, second, third normal forms
+--first normal forms
+columns couldnt be broken down further into smaller pieces and there are no repeating groups
+
+--second normal forms
+
+
+--third normal forms
+all columns are fully dependant on the entire primary key
+
+EXERCISE 10.4
+--put data into 1st, 2nd, and 3rd forms
+Author1 lastname, Author1 firstname, etc.
+ Author2 lastname, Author2 firstname, etc.
+ Author3 lastname, Author3 firstname, etc.
+ Publisher name, address
+ Publisher book1, book2, etc.
+ Published Date
+ Price of book
+ Advance to Author1, Advance to Author2, etc.
+
+--1st forms
+author(author_id, advance1, advance2, advance3, firstname1, lastname1, firstname2, lastname2, firstname3, lastname3)
+publisher(publisher_id, name, address, book1, book2, book3, date1, date2, date3)
+book(book_id, price1, price2, price3)
+
+--2nd forms
+author(author_id, lastname, firstname)
+author2(author_id, lastname, firstname)
+author3(author_id, lastname, firstname)
+publisher(publisher_id, name, address, pubdate)
+book(book_id, price, pubdate)
+bookauthor(author_id, advance)
+
+--3rd forms
+author(author_id, lastname, firstname)
+author2(author_id, lastname, firstname)
+author3(author_id, lastname, firstname)
+publisher(publisher_id, name, address)
+book(book_id, price, pubdate)
+bookauthor(author_id, advance)
+
+Department name 
+Job Title 
+Social security numbers (SSN) for their employees 
+Employee name, address and phone number 
+Employee department number and job code 
+Salary for employee 
+Job Description for employee 
+
+--Describe the relationship shown between the Department and Employee. 
+The department to employee relationship is described as a one-to-many relationship.
+This relationship describes that one single department can have a multiple amount of 
+employees working for the department. On the other hand, the employees can only work
+for one single department number. This means that the department table will have multiple
+employee ids, while the employee table will have only one employee department id per employee
+table.
+
+--Describe the relationship shown between the Employee and Job. 
+The job to employee relationship can also be described as a one-to-many relationship.
+This relationship describes that one single job can be supplied to multiple employees
+and that employees can only have one particular job. This means that the job table will
+hold multiple employee ids, and the employees inside of the employee table will only contain
+one single job id.
+
+
+  EMPLOYEE(emp_id-PK, firstname, lastname, address, 
+city, state, zip, phone, salary, deptnum-FK, jobcode-FK) 
+
+  DEPARTMENT(deptnum-PK, name) 
+
+  JOB(jobcode-PK, title, description) 
+
+Question: What is the purpose of the "deptnum - FK" (Foriegn Key) 
+in the EMPLOYEE table? What relationship between entities does it enforce? 
+
+--The purpose of the foreign key, "deptnum - FK", in the EMPLOYEE table is to join the employee
+--table and the department tables together. This relationship will help find an employer's position
+--inside of a specific department name. This can be described as a one-to-many relationship since
+--a single department can hold multiple employee id's, but the employees can only hold one single
+--department id.
+
+CREATE TABLE employee
+	(
+		employee_id		numeric(9)		primary key,
+		lastname			varchar(40)		not null,
+		firstname			varchar(40)		not null,
+		dept_code		varchar(3),
+		salary			numeric(8,2),
+		hire_date			date				not null
+	)
+
+--NUMERIC(7,2) = 12345.67
+
+Exercise 11.1
+CREATE TABLE players
+	(
+	player_id	numeric(50)	primary key,
+	name	varchar(20)	not null,
+	phone_number	numeric(15),
+	position_played varchar(20),
+	address varchar(30),
+	hitting_percentage numeric(3,3),
+	date_joined date
+	)
+
+CREATE TABLE bookauthor2
+(
+  author_id numeric(11) not null,
+  isbn varchar(13) not null,
+  author_order numeric(11) not null,
+  royaltyshare numeric(5,2),
+  PRIMARY KEY (author_id, isbn)
+)
+
+create table book
+	(
+	isbn varchar(13) primary key,
+	title varchar(80) not null,
+	type varchar(12),
+	pub_id numeric(4),
+	price numeric(9,2),
+	advance numeric(9,2),
+	ytd_sales numeric(5),
+	pubdate date null,
+	CONSTRAINT pub_id_fk_publisher FOREIGN KEY (pub_id)
+	  REFERENCES publisher (pub_id)
+	)
+
+EXERCISE 11.2
+CREATE TABLE department
+	(
+	dept_num numeric(10) primary key
+	)
+
+CREATE TABLE employee
+	(
+	dept_num numeric(10) not null,
+	employee_id numeric(50) primary key,
+	CONSTRAINT dept_num_fk_department FOREIGN KEY (dept_num)
+		REFERENCES department (dept_num)
+	)
+
+--indexes
+CREATE [UNIQUE] INDEX index-name
+	ON table-name (column-name[.column-name...]);
+
+CREATE INDEX pub_id_idx
+	ON book (pub_id);
+
+CREATE INDEX author_name_idx
+	ON author (lastname, firstname);
+	
+--composite index = 2 or more columns are searched
+--Columns do not have to be in the same order as table
+CREATE UNIQUE INDEX editor_ssn_idx
+	ON editor (ssn);
+--columns to index
+primary key
+columns accessed in sorted order
+columns regularly used in joins
+columns that are searched for a range of values
+--columns not to index
+columns seldom referenced in the WHERE clause
+columns that only have 2 or 3 values, for example, male/female
+
+EXERCISE 11.3
+CREATE UNIQUE INDEX ssn_idx
+	ON author (ssn);
+
+CREATE INDEX name_idx
+	ON editor (lastname, firstname);
+	
+--Modifying Existing Tables
+-Accomplished through the ALTER TABLE command
+-Use an ADD clause to add a column
+-Use a MODIFY clause to change a column
+-Use a DROP COLUMN to drop a column
+
+ALTER TABLE tablename
+	ADD | MODIFY | DROP COLUMN | column_name (definition)
+
+ALTER TABLE author
+	MODIFY lastname varchar(80);
+
+ALTER TABLE author
+	ADD ext numeric(4);
+
+--modification rules
+-Column must be as wide as the data it already contains
+-If a NUMBER column already contains data, size cannot be decreased
+-Adding or changing default data does not affect existing data
+
+ALTER TABLE author
+	DROP COLUMN ext;
+
+DROP TABLE sometable;
+
+EXERCISE 11.4
+ALTER TABLE editor
+	MODIFY lastname varchar(30);
+	
+ALTER TABLE editor
+	ADD birthdate date;
+
+CREATE TABLE stuff
+	(
+	youngmoney numeric(10)
+	)
+
+DROP TABLE stuff;
+
+EXERCISE 11.5
+INSERT INTO publisher VALUES (
+	5,
+	'Jardin, Inc.',
+	'55th Avenue',
+	'Camden',
+	'NJ');
+
+--add a row using less than all of the columns defined for a table
+INSERT INTO publisher
+	(pub_id, name)
+	VALUES
+	(7, 'Healthtext');
+
+--adds all the editors with the last name of Penny to the author table
+INSERT INTO author  (author_id, firstname, lastname)
+	SELECT editor_id, firstname, lastname
+	FROM editor
+	WHERE lastname = 'Penny';
+
+INSERT INTO book
+	(isbn, title, pub_id)
+	VALUES 
+	(12345, 'KhanFused', 1);
+
+INSERT INTO author
+	(firstname, lastname, author_id)
+	VALUES
+	('George', 'Takei', 10);
+
+INSERT INTO bookauthor (author_id, isbn, author_order)
+	VALUES
+	(10, 12345, 3);
+
+EXERCISE 11.6
+UPDATE table_name
+	SET column_name1 = expression1,
+		column_name2 = expression2...
+	[ WHERE search_conditions ]
+
+--Change the price on all the books in the book table to $17.99
+UPDATE book
+	SET price = 17.99;
+
+--Change the price of "Analyzing the Obsessive " to $17.99
+UPDATE book
+	SET price = 17.99
+	WHERE title = "Analyzing the Obsessive";
+
+UPDATE book
+	SET price = price * 2,
+		advance = advance + 1000
+	WHERE ytd_sales > 10000;
+
+UPDATE author
+	SET city = 'SEATTLE',
+	state = 'WA'
+	WHERE author_id IN
+		(SELECT author_id 
+		FROM bookauthor
+		WHERE isbn IN
+			(SELECT isbn
+			FROM book
+			WHERE pub_id =
+				(SELECT pub_id
+				FROM publisher
+				WHERE name = 'Sunshine Publishers')));
+
+EXERCISE 11.7
+UPDATE book
+	SET price = price - (price * 0.2)
+	WHERE ytd_sales < 1000;
+
+DELETE FROM table_name
+	[WHERE search_conditions];
+
+DELETE FROM book
+	WHERE price = 2.99;
+
+--deletes all authors who have the same last name as any Managing Editor
+DELETE FROM author
+	WHERE lastname IN
+		(SELECT lastname
+		FROM editor
+		WHERE editor_position = 'Managing Editor');
+
+DELETE FROM author
+	WHERE city = 'oakland' AND state = 'CA';
+
+DELETE FROM publisher
+	WHERE name = 'Sunshine Publishers';
+
+CREATE TABLE Customer
+	(
+	customer_number numeric(8) primary key,
+	item_ordered varchar(30),
+	date_ordered date,
+	price numeric(10,2),
+	ssn varchar(11) NOT NULL,
+	firstname varchar(20) NOT NULL,
+	lastname varchar(20) NOT NULL,
+	street varchar(30) NOT NULL,
+	city varchar(20) NOT NULL,
+	state varchar(2) NOT NULL
+	)
+
+ALTER TABLE Customer
+	MODIFY lastname varchar(50);
+
+CREATE UNIQUE INDEX ssn_idx
+	ON Customer (ssn);
+
+INSERT INTO publisher (name, pub_id, address, city, state)
+	VALUES
+	('BooksRUs', 7, '456 Publisher Lane', 'St. Louis', 'MO');
+
+UPDATE book
+	SET type = 'geeky'
+	WHERE title LIKE '%Computer%' OR title LIKE '%Networking%';
+
+DELETE FROM author
+	WHERE state = 'UT';
+
+--LOWER(column or value), UPPER
+SELECT lastname, firstname, city, LOWER(city)
+	FROM author;
+
+SELECT city
+	FROM author
+	WHERE UPPER(city) = 'OAKLAND';
+
+--case sensitive
+SELECT *
+	FROM author
+	WHERE binary lastname LIKE 'd%';
+
+--returns portion of a string
+SELECT SUBSTR(column, starting-position, [length of string])
+
+SELECT SUBSTR('w3resource', 4, 3);
+
+SELECT phone, SUBSTR(phone, 1, 3)
+	FROM author;
+
+SELECT length(title)
+	FROM book;
+
+--changes string to another specified string, only for show
+SELECT REPLACE(city, 'Oak', 'Spruce')
+	FROM author;
+
+SELECT CONCAT(city, ', ', state)
+	FROM author;
+
+EXERCISE 12.1
+SELECT CONCAT(lastname, ', ', firstname), LOWER(city)
+	FROM author
+	WHERE city = 'oakland';
+
+SELECT LOWER(lastname), LOWER(firstname), LOWER(city), LOWER(REPLACE(state, 'CA', 'FL'))
+	FROM author
+	WHERE binary city LIKE 'S%';
+
+--ROUND number to specified precision, # of decimal places
+SELECT title, price, ROUND(price, 0)
+	FROM book;
+
+--TRUNCATE removes stuff after decimal place
+SELECT title, price, TRUNCATE(price, 0) 'Truncated Price'
+	FROM book;
+
+--MOD = price / 5 (division)
+SELECT title, MOD(price, 5)
+	FROM book;
+
+--ABS finds absolute value
+SELECT title, price - 100, ABS(price - 100)
+	FROM book;
+
+EXERCISE 12.2
+SELECT lastname, firstname, title, royaltyshare, ROUND(royaltyshare, 0), TRUNCATE(royaltyshare, 0)
+	FROM author
+		JOIN bookauthor USING (author_id)
+		JOIN book USING (isbn)
+	ORDER BY 1,2;
+
+--date functions
+SELECT title, pubdate
+	FROM book;
+	
+UPDATE book
+	SET pubdate = '2017-07-10'
+	WHERE title = 'Silicon Valley Start-ups';
+
+--converts dates to a formatted character string
+https://dev.mysql.com/doc/refman/5.5/en/date-and-time-functions.html
+
+SELECT title, pubdate, DATE_FORMAT(pubdate, '%M %e, %Y')
+	FROM book;
+
+--STR_TO_DATE converts various date formats into format it needs (YYYY-MM-DD)
+UPDATE book
+	SET pubdate = STR_TO_DATE('01/22/1956', '%m/%d/%Y')
+	WHERE title = 'One Hour Negotiations';
+
+--ADDDATE adds specified number of days to a date
+SELECT title, pubdate, ADDDATE(pubdate, 22)
+	FROM book;
+
+SELECT title, pubdate, CURDATE()
+	FROM book;
+
+SELECT UPPER(title), price
+	FROM book
+	WHERE title LIKE '%computer%' OR title LIKE '%silicon%'
+	ORDER BY 1,2;
+
+INSERT INTO author  (author_id, firstname, lastname)
+	SELECT editor_id, firstname, lastname
+	FROM editor
+	WHERE lastname = 'Penny';
+
+INSERT INTO publisher (name, pub_id, address, city, state)
+	VALUES
+	('BooksRUs', 7, '456 Publisher Lane', 'St. Louis', 'MO');
+
+INSERT INTO book (isbn, title, type, pub_id, price, advance, ytd_sales, pubdate)
+	VALUES
+	('1-8888-7777-x', 'How to make money', 'computer', 1, 20, 10000, 5000, STR_TO_DATE('April 1, 2014', '%M %e, %Y'));
+
+SELECT title, DATE_FORMAT(pubdate, '%m/%d/%y')
+	FROM book;
+
+--views
+restricts user accesss to sensitive data
+reduce complex query requirements
+changes column name
+
+CREATE [OR REPLACE] VIEW
+	viewname (column1, column2, ..)
+	AS
+		select_statement;
+		
+CREATE OR REPLACE VIEW editor_info
+	AS	
+		SELECT lastname, firstname, phone, editor_position
+		FROM editor;
+		
+SELECT * FROM editor_info;
+
+CREATE OR REPLACE VIEW books_and_authors (book, lastn, firstn)
+AS	
+	SELECT title, lastname, firstname
+	FROM book
+		JOIN bookauthor USING (isbn)
+		JOIN author USING (author_id);
+
+SELECT * FROM books_and_authors
+	ORDER BY 1,2,3;
+
+DROP VIEW books_and_authors;
+
+EXERCISE 13.1
+CREATE OR REPLACE VIEW publishers_and_titles
+AS
+	SELECT name, title
+	FROM book
+		JOIN publisher USING (pub_id);
+
+SELECT * FROM publishers_and_titles
+	ORDER BY 1,2;
+
+CREATE OR REPLACE VIEW book_without_advance (ID, name, category, publisher_id, cost, yearly_sales, date_published)
+AS
+	SELECT isbn, title, type, pub_id, price, ytd_sales, pubdate
+	FROM book;
+
+SELECT * FROM book_without_advance
+	ORDER BY name, cost;
+
+--combining results of 2 or more SELECT statements
+
+--supresses duplicates
+SELECT lastname, firstname
+	FROM author
+	UNION
+	SELECT lastname, firstname
+		FROM editor
+		ORDER BY 1,2;
+
+--does not supress duplicates
+SELECT lastname, firstname
+	FROM author
+	UNION ALL
+	SELECT lastname, firstname
+		FROM editor
+		ORDER BY 1,2;
+
+SELECT 'author', lastname, firstname
+	FROM author
+	UNION
+	SELECT 'editor', lastname, firstname
+		FROM editor
+		ORDER BY 1,2,3;
+
+SELECT 'author', lastname, firstname, null
+	FROM author
+	UNION
+	SELECT 'editor', lastname, firstname, editor_position
+		FROM editor
+		ORDER BY 1,2,3;
+
+--three select statements, CANT MIX DATA TYPES!
+SELECT lastname, firstname
+	FROM author
+	UNION
+	SELECT lastname, firstname
+		FROM editor
+	UNION
+	SELECT title, type
+		FROM book
+	ORDER BY 1,2;
+
+EXERCISE 13.2
+SELECT city, state
+	FROM author
+	UNION
+	SELECT city, state
+		FROM publisher;
+
+SELECT 'editor', firstname, lastname, ssn
+	FROM editor
+	WHERE SUBSTR(ssn, 5, 2) = '72'
+	UNION
+	SELECT 'author', firstname, lastname, ssn
+		FROM author
+		WHERE SUBSTR(ssn, 5, 2) = '72';
+
+SELECT 'editor', firstname, lastname, ssn
+	FROM editor
+	WHERE SUBSTR(ssn, 6, 1) = '7' AND SUBSTR(ssn, 8, 1) = '2'
+	UNION
+	SELECT 'author', firstname, lastname, ssn
+		FROM author
+		WHERE SUBSTR(ssn, 6, 1) = '7' AND SUBSTR(ssn, 8, 1) = '2';
+
+CREATE OR REPLACE VIEW editor_author_ssn (type, firstname, lastname, ssn)
+AS
+	SELECT 'editor', firstname, lastname, ssn
+	FROM editor
+	WHERE SUBSTR(ssn, 6, 1) = '7' AND SUBSTR(ssn, 8, 1) = '2'
+	UNION
+	SELECT 'author', firstname, lastname, ssn
+		FROM author
+		WHERE SUBSTR(ssn, 6, 1) = '7' AND SUBSTR(ssn, 8, 1) = '2';
+
+SELECT * FROM editor_author_ssn;
+
+CREATE OR REPLACE VIEW editor_and_books
+AS
+	SELECT firstname, lastname, title
+		FROM editor
+			JOIN bookeditor USING (editor_id)
+			JOIN book USING (isbn);
+
+SELECT * FROM editor_and_books;
+
+--transaction management
+--COMMIT = save
+--ROLLBACK = undoes changes since last COMMIT
+--lost update problems? -> Row Locking
+SELECT au_id, city
+	FROM authors
+	WHERE au_id = '144-11-2222'
+	FOR UPDATE OF city;
+
+--privaleges
+GRANT INSERT, UPDATE
+	ON book
+	TO perrys, smithj;
+	
+REVOKE UPDATE
+	ON book(advance, price)
+	FROM jonesk;
+
+--restricting access
+--payroll table: name, ssn, dept, salary
+CREATE VIEW payroll_generalaccess
+	(name, dept) AS
+	SELECT name, dept
+	FROM payroll;
+
+--Oracle has GROUPS, ROLEs, and PRIVILEGES
+--allows you to group user_ids under a GROUP, ROLE, or PRIVILEGE
+--allows you to assign access rights to that GROUP, ROLE, or PRIVILEGE
+EXERCISE 14.3
+GRANT INSERT, UPDATE
+	ON author
+	TO perrys, landeyt;
+
+--database integrity
+--DOMAIN CONSTRAINTS INTEGRITY
+--data types
+--ENTITY INTEGRITY
+--no primary keys with null status
+--REFERENTIAL INTEGRITY
+--connections between primary and foreign keys
+Referencial integrity can be explained by taking a close note at how foreign and primary keys relate
+to one another. It is important to make sure that the keys that are referencing each other are not 
+being deleted or changed in a way. This would result in a situation where the keys can no longer 
+connect to other tables to process proper join functions. This can be avoided by using Referential
+Integrity, which is the process of making sure foreign and primary keys are properly linked together.
+
+--Which SQL statements are used to save or undo your changes to the database since your last save?
+In order to save or undo SQL statements since the last save in the database, we must use a 'FOR UPDATE OF (column)'
+inside of a SELECT statement. 
+
+--Which SQL statement is used to give users access to tables/columns in the database and which statement is used to take away access to table/columns in the database?
+The SQL statement that is used to give users access to tables and columns in a database is a 
+GRANT INSERT, UPDATE statement. The statements to remove or restrict access from a database are both 
+REVOKE UPDATE statements and CREATE VIEW statements.
+
+--outdated JOIN
+SELECT name, title, type, price
+	FROM publisher p, book b
+	WHERE p.pub_id = b.pub_id
+	AND type = 'computer'
+	AND price > 20;
+
+SELECT title, firstname, lastname, city, state
+	FROM book b, bookauthor ba, author a
+	WHERE b.isbn = ba.isbn
+	AND ba.author_id = a.author_id
+	AND city = 'Oakland'
+	AND state = 'CA';
+
+EXERCISE 15.1
+SELECT name, title, a.firstname, a.lastname
+	FROM publisher p, book b, author a, bookauthor ba
+	WHERE p.pub_id = b.pub_id
+	AND a.author_id = ba.author_id
+	AND b.isbn = ba.isbn;
+
+--AND or ALL modifiers
+SELECT name
+	FROM publisher
+	WHERE pub_id = ANY
+		(SELECT DISTINCT pub_id
+		FROM book);
+
+--finds values above the minimum
+SELECT name
+	FROM publisher
+	WHERE pub_id > ANY
+		(SELECT DISTINCT pub_id
+		FROM book);
+
+--more than the highest value returned by the subquery
+SELECT name
+	FROM publisher
+	WHERE pub_id > ALL
+		(SELECT DISTINCT pub_id
+		FROM book);
+
+EXERCISE 15.2
+SELECT firstname, lastname, title
+	FROM author
+	JOIN bookauthor USING (author_id)
+	JOIN book USING (isbn)
+	WHERE title > ANY
+		(SELECT MIN(title)
+		FROM book);
+
+--EXISTS tests whether or not a condition exists in a subquery
+--Correlated Subquery
+SELECT DISTINCT name
+	FROM publisher p
+	WHERE EXISTS
+		(SELECT *
+		FROM book
+		WHERE pub_id = p.pub_id
+		AND type = 'business';
+
+SELECT title
+	FROM book
+	WHERE NOT EXISTS
+		(SELECT *
+		FROM orderitems
+		WHERE isbn = book.isbn);
+
+--list of authors who have not written anything
+EXERCISE 15.3
+SELECT firstname, lastname
+	FROM author
+	WHERE NOT EXISTS
+		(SELECT *
+		FROM book
+		WHERE title = book.title);
+		
+SELECT name, title, type, price
+	FROM publisher p, book b
+	WHERE p.pub_id = b.pub_id
+	AND type = 'cooking'
+	AND price < 30;
+
+SELECT title, price
+	FROM book
+	WHERE price < ANY
+		(SELECT DISTINCT price
+		FROM book);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
